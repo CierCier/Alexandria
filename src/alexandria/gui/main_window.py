@@ -265,7 +265,7 @@ class AlexandriaGUI:
         labels = ["Timestamp:", "Application:", "Window:", "Size:", "File Size:"]
         for i, label_text in enumerate(labels):
             label = Gtk.Label(label_text)
-            label.set_halign(Gtk.Align.END)
+            label.set_halign(Gtk.Align.START)
             label.get_style_context().add_class("dim-label")
             grid.attach(label, 0, i, 1, 1)
 
