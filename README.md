@@ -45,7 +45,7 @@ sudo dnf install grim tesseract python3-gobject gtk3-devel python3-nltk
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/alexandria.git
+git clone https://github.com/CierCier/alexandria.git
 cd alexandria
 
 # Install with rye
@@ -55,7 +55,7 @@ rye sync
 ### From Source
 
 ```bash
-git clone https://github.com/yourusername/alexandria.git
+git clone https://github.com/CierCier/alexandria.git
 cd alexandria
 pip install -e .
 ```
