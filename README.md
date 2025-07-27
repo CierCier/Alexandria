@@ -294,6 +294,6 @@ GNU General Public License v3.0 - see LICENSE file for details.
 ## Acknowledgments
 
 - [Tesseract OCR](https://github.com/tesseract-ocr/tesseract) for text recognition
-- [grim](https://github.com/emersion/grim) for Wayland screenshot capture
-- [GTK4](https://gtk.org/) and [Libadwaita](https://gitlab.gnome.org/GNOME/libadwaita) for the modern UI
-- The Wayland and wlr-protocols communities
+- [grim](https://sr.ht/~emersion/grim/) for Wayland screenshot capture
+- [GTK4](https://gtk.org/) and [Libadwaita](https://gitlab.gnome.org/GNOME/libadwaita)
+- The Wayland Community
