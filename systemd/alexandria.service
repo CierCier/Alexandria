@@ -1,0 +1,27 @@
+[Unit]
+Description=Alexandria Screenshot Recall Service
+Documentation=man:alexandria(1)
+After=graphical-session.target
+Wants=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/alexandria-daemon
+Restart=always
+RestartSec=10
+Environment=WAYLAND_DISPLAY=%i
+Environment=XDG_RUNTIME_DIR=%t
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=false
+ReadWritePaths=%h/.local/share/alexandria %h/.cache/alexandria %h/.config/alexandria
+
+# Resource limits
+MemoryMax=512M
+CPUQuota=20%
+
+[Install]
+WantedBy=default.target

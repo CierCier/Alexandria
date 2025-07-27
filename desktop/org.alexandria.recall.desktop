@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Alexandria
+GenericName=Screenshot Recall
+Comment=View and search your screenshot memories
+Icon=org.alexandria.recall
+Exec=alexandria-gui
+Terminal=false
+Type=Application
+Categories=Graphics;Photography;
+Keywords=screenshot;recall;memory;search;ocr;
+StartupNotify=true
+StartupWMClass=alexandria

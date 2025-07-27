@@ -1,0 +1,64 @@
+[project]
+name = "alexandria"
+version = "0.1.0"
+description = "Screenshot Recall Utility for Wayland compositors with OCR and search capabilities"
+authors = [
+    { name = "Aabish Malik", email = "aabishmalik3337@gmail.com" }
+]
+dependencies = [
+    "keyring>=25.6.0",
+    "opencv-python>=4.12.0.88",
+    "pytesseract>=0.3.13",
+    "pillow>=11.3.0",
+    "pydbus>=0.6.0",
+    "pygobject >= 3.42.0",
+    "pywayland>=0.4.17",
+    "nltk>=3.8.0",
+    "schedule>=1.2.2",
+    "sqlalchemy>=2.0.41",
+    "alembic>=1.16.4",
+    "click>=8.2.1",
+]
+readme = "README.md"
+requires-python = ">= 3.8"
+keywords = ["screenshot", "recall", "wayland", "ocr", "search", "memory"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: X11 Applications :: GTK",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Desktop Environment",
+    "Topic :: Multimedia :: Graphics :: Capture :: Screen Capture",
+    "Topic :: Text Processing :: Indexing",
+]
+
+[project.scripts]
+alexandria = "alexandria.cli:cli"
+alexandria-daemon = "alexandria.service.daemon:main"
+alexandria-gui = "alexandria.gui.main_window:main"
+
+[project.urls]
+Homepage = "https://github.com/CierCier/alexandria"
+Repository = "https://github.com/CierCier/alexandria.git"
+Issues = "https://github.com/CierCier/alexandria/issues"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.rye]
+managed = true
+dev-dependencies = []
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/alexandria"]
