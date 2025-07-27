@@ -217,9 +217,24 @@ def install():
             shutil.copy2(desktop_source, desktop_dest)
             click.echo(f"Installed desktop file: {desktop_dest}")
 
+        # Install man page
+        man_dir = Path.home() / ".local" / "share" / "man" / "man1"
+        man_dir.mkdir(parents=True, exist_ok=True)
+
+        man_source = Path(__file__).parent.parent.parent / "man" / "alexandria.1"
+        man_dest = man_dir / "alexandria.1"
+
+        if man_source.exists():
+            import shutil
+
+            shutil.copy2(man_source, man_dest)
+            click.echo(f"Installed man page: {man_dest}")
+
         click.echo("\nTo enable the service:")
         click.echo("  systemctl --user enable alexandria.service")
         click.echo("  systemctl --user start alexandria.service")
+        click.echo("\nTo view the manual:")
+        click.echo("  man alexandria")
 
     except Exception as e:
         click.echo(f"Installation error: {e}", err=True)

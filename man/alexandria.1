@@ -1,0 +1,388 @@
+.TH ALEXANDRIA 1 "July 2025" "alexandria 0.1.0" "User Commands"
+.SH NAME
+alexandria \- Screenshot Recall Utility for Wayland compositors with OCR and search capabilities
+
+.SH SYNOPSIS
+.B alexandria
+[\fIOPTION\fR]...
+[\fICOMMAND\fR]
+[\fIARGS\fR]...
+
+.SH DESCRIPTION
+Alexandria is a powerful screenshot recall utility designed for Linux Wayland compositors that automatically captures, analyzes, and makes your screen memories searchable. It provides OCR text extraction, intelligent tagging, and comprehensive search capabilities for your screenshot history.
+
+Alexandria runs as a background daemon that periodically captures screenshots, extracts text using Tesseract OCR, generates intelligent tags using NLTK, and stores everything in a searchable database. It includes both command-line and GUI interfaces for managing and searching your screenshot memories.
+
+.SH COMMANDS
+.TP
+.B daemon
+Run the Alexandria screenshot daemon. This is the core service that captures and processes screenshots in the background.
+
+.TP
+.B gui
+Launch the Alexandria GTK3 graphical user interface for browsing and searching screenshots.
+
+.TP
+.B status
+Display current daemon status, configuration, and statistics about captured memories.
+
+.TP
+.B search \fIQUERY\fR
+Search through captured memories by text content. Returns matching screenshots with metadata.
+
+.TP
+.B cleanup
+Clean up old memories from the database and filesystem.
+
+.TP
+.B config
+Display current configuration settings and file locations.
+
+.TP
+.B install
+Install systemd service and desktop files for system integration.
+
+.SH OPTIONS
+.SS Global Options
+.TP
+.B \-\-version
+Show program version and exit.
+
+.TP
+.B \-\-help
+Show help message and exit.
+
+.SS Daemon Options
+.TP
+.B \-\-debug
+Enable debug logging for troubleshooting.
+
+.TP
+.B \-\-one\-shot
+Take a single screenshot and exit instead of running continuously.
+
+.SS Search Options
+.TP
+.B \-\-limit \fIN\fR
+Maximum number of search results to return (default: 10).
+
+.SS Cleanup Options
+.TP
+.B \-\-days \fIN\fR
+Delete memories older than N days (default: 30).
+
+.TP
+.B \-\-confirm
+Skip confirmation prompt before deleting memories.
+
+.SH CONFIGURATION
+Alexandria follows XDG Base Directory Specification for configuration and data storage:
+
+.TP
+.B ~/.config/alexandria/config.toml
+Main configuration file containing screenshot, OCR, and Wayland settings.
+
+.TP
+.B ~/.local/share/alexandria/
+Data directory containing the SQLite database and screenshot files.
+
+.TP
+.B ~/.cache/alexandria/
+Cache directory for temporary files and processed data.
+
+.SS Configuration Sections
+.TP
+.B [screenshot]
+Screenshot capture settings including backend, quality, and interval.
+
+.TP
+.B [wayland]
+Wayland compositor specific settings and window information gathering.
+
+.TP
+.B [ocr]
+OCR processing settings including language, preprocessing, and confidence thresholds.
+
+.TP
+.B [privacy]
+Privacy settings for handling sensitive information and content filtering.
+
+.SH SUPPORTED COMPOSITORS
+Alexandria provides enhanced support for major Wayland compositors:
+
+.TP
+.B Sway
+Full window information via swaymsg, workspace detection, and focus tracking.
+
+.TP
+.B Hyprland
+Window metadata via hyprctl, workspace information, and active window detection.
+
+.TP
+.B GNOME/Mutter
+Window information via GNOME Shell D-Bus interfaces and workspace tracking.
+
+.TP
+.B KDE/KWin
+Window metadata via KWin scripting and D-Bus interfaces.
+
+.TP
+.B Other wlr-protocols compositors
+Basic screenshot support via grim and layer-shell protocols.
+
+.SH FEATURES
+
+.SS Advanced Tagging System
+Alexandria uses NLTK (Natural Language Toolkit) for intelligent text processing:
+.IP \(bu 4
+Lemmatization to normalize word forms
+.IP \(bu 4
+Part-of-speech tagging for better keyword extraction
+.IP \(bu 4
+Named entity recognition for identifying people, places, and organizations
+.IP \(bu 4
+Stop word filtering to focus on meaningful content
+.IP \(bu 4
+Window and application context integration
+
+.SS Privacy Protection
+.IP \(bu 4
+Automatic detection of password fields and sensitive content
+.IP \(bu 4
+Configurable content filtering and exclusion rules
+.IP \(bu 4
+Local-only storage with no cloud synchronization
+.IP \(bu 4
+Encryption support for sensitive databases
+
+.SS Search Capabilities
+.IP \(bu 4
+Full-text search across OCR-extracted content
+.IP \(bu 4
+Application and window title filtering
+.IP \(bu 4
+Date range queries and temporal search
+.IP \(bu 4
+Tag-based filtering and categorization
+.IP \(bu 4
+Regular expression support for advanced queries
+
+.SH SYSTEMD INTEGRATION
+Alexandria can be installed as a systemd user service for automatic startup:
+
+.nf
+# Install service files
+alexandria install
+
+# Enable and start the service
+systemctl --user enable alexandria.service
+systemctl --user start alexandria.service
+
+# Check service status
+systemctl --user status alexandria.service
+.fi
+
+The service automatically starts with your desktop session and captures screenshots according to your configured interval.
+
+.SH EXAMPLES
+
+.SS Basic Usage
+.nf
+# Start the daemon manually
+alexandria daemon
+
+# Launch the GUI
+alexandria gui
+
+# Check daemon status
+alexandria status
+
+# Search for screenshots containing "password"
+alexandria search "password"
+
+# Search with custom limit
+alexandria search "meeting notes" --limit 20
+.fi
+
+.SS Advanced Searching
+.nf
+# Search for specific application content
+alexandria search "firefox browser"
+
+# Clean up old memories (30+ days)
+alexandria cleanup --days 30
+
+# Show current configuration
+alexandria config
+.fi
+
+.SS Service Management
+.nf
+# Install and enable systemd service
+alexandria install
+systemctl --user enable alexandria.service
+systemctl --user start alexandria.service
+
+# View service logs
+journalctl --user -u alexandria.service -f
+
+# Restart the service
+systemctl --user restart alexandria.service
+.fi
+
+.SH FILES
+.TP
+.B ~/.config/alexandria/config.toml
+Main configuration file
+
+.TP
+.B ~/.local/share/alexandria/memories.db
+SQLite database containing screenshot metadata and OCR text
+
+.TP
+.B ~/.local/share/alexandria/screenshots/
+Directory containing captured screenshot files
+
+.TP
+.B ~/.cache/alexandria/
+Temporary files and processing cache
+
+.TP
+.B ~/.config/systemd/user/alexandria.service
+Systemd user service file (after installation)
+
+.TP
+.B ~/.local/share/applications/org.alexandria.recall.desktop
+Desktop application entry (after installation)
+
+.SH ENVIRONMENT
+.TP
+.B WAYLAND_DISPLAY
+Wayland display socket (required for screenshot capture)
+
+.TP
+.B XDG_RUNTIME_DIR
+Runtime directory for Wayland socket communication
+
+.TP
+.B XDG_CONFIG_HOME
+Configuration directory override (default: ~/.config)
+
+.TP
+.B XDG_DATA_HOME
+Data directory override (default: ~/.local/share)
+
+.TP
+.B XDG_CACHE_HOME
+Cache directory override (default: ~/.cache)
+
+.SH DEPENDENCIES
+.SS Required System Packages
+.IP \(bu 4
+.B grim
+Wayland screenshot utility (recommended backend)
+.IP \(bu 4
+.B tesseract-ocr
+OCR engine for text extraction
+.IP \(bu 4
+.B python3-gi
+Python GObject bindings for GTK3 GUI
+.IP \(bu 4
+.B python3-nltk
+Natural Language Toolkit for text processing
+
+.SS Required Python Packages
+.IP \(bu 4
+.B pytesseract
+Python wrapper for Tesseract OCR
+.IP \(bu 4
+.B opencv-python
+Computer vision library for image processing
+.IP \(bu 4
+.B sqlalchemy
+Database ORM for memory storage
+.IP \(bu 4
+.B pygobject
+GTK3 bindings for GUI interface
+.IP \(bu 4
+.B pywayland
+Wayland protocol bindings
+.IP \(bu 4
+.B nltk
+Natural language processing library
+
+.SH EXIT STATUS
+Alexandria returns the following exit codes:
+.TP
+.B 0
+Success
+.TP
+.B 1
+General error (configuration, database, or runtime error)
+.TP
+.B 2
+Command line argument error
+.TP
+.B 130
+Interrupted by user (Ctrl+C)
+
+.SH SECURITY CONSIDERATIONS
+.IP \(bu 4
+Alexandria captures everything visible on your screen, which may include sensitive information
+.IP \(bu 4
+Screenshot data is stored locally in plaintext by default
+.IP \(bu 4
+The OCR process may extract and index sensitive text content
+.IP \(bu 4
+Consider configuring privacy filters for sensitive applications
+.IP \(bu 4
+Regular cleanup of old memories is recommended for privacy
+
+.SH TROUBLESHOOTING
+
+.SS Common Issues
+.TP
+.B No screenshots captured
+Ensure grim is installed and your compositor supports wlr-screencopy-v1 protocol.
+
+.TP
+.B OCR not working
+Install tesseract-ocr and language data packages for your locale.
+
+.TP
+.B GUI won't start
+Install python3-gi, gtk3, and related development packages.
+
+.TP
+.B Permission errors
+Check that XDG directories are writable and WAYLAND_DISPLAY is set.
+
+.SS Debug Mode
+Run alexandria with debug logging:
+.nf
+alexandria daemon --debug
+.fi
+
+Check systemd logs:
+.nf
+journalctl --user -u alexandria.service -f
+.fi
+
+.SH BUGS
+Report bugs at: https://github.com/CierCier/alexandria/issues
+
+.SH SEE ALSO
+.BR grim (1),
+.BR tesseract (1),
+.BR systemctl (1),
+.BR journalctl (1)
+
+.SH AUTHOR
+Alexandria was written by Aabish Malik <aabishmalik3337@gmail.com>.
+
+.SH COPYRIGHT
+Copyright \(co 2025 Aabish Malik.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+Alexandria is licensed under the GNU General Public License version 3.

@@ -62,3 +62,6 @@ allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/alexandria"]
+
+[tool.hatch.build.targets.wheel.sources]
+"man" = "alexandria/man"
