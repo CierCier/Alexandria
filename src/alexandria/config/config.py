@@ -15,8 +15,8 @@ class Config:
 
     DEFAULT_CONFIG = {
         "screenshot": {
-            "interval_minutes": 5,
-            "max_screenshots_per_day": 288,  # Every 5 minutes for 24 hours
+            "interval_minutes": 1,
+            "max_screenshots_per_day": 1 * 24 * 60,  # 1 screenshot per minute
             "compression_quality": 85,
             "capture_cursor": False,
             "exclude_windows": [],

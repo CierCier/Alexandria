@@ -350,24 +350,29 @@ class AlexandriaGUI:
         """Load memories from database."""
 
         def load_thread():
-            try:
-                with self.db.get_session() as session:
-                    memories = (
-                        session.query(Memory)
-                        .order_by(Memory.timestamp.desc())
-                        .limit(100)
-                        .all()
-                    )
+            """Thread to load memories from the database."""
+            while True:
+                try:
+                    with self.db.get_session() as session:
+                        memories = (
+                            session.query(Memory)
+                            .order_by(Memory.timestamp.desc())
+                            .limit(100)
+                            .all()
+                        )
 
-                    memory_items = []
-                    for memory in memories:
-                        item = MemoryListItem(memory)
-                        memory_items.append(item)
+                        memory_items = []
+                        for memory in memories:
+                            item = MemoryListItem(memory)
+                            memory_items.append(item)
 
-                    GLib.idle_add(self.update_memory_list, memory_items)
-            except Exception as e:
-                GLib.idle_add(self.show_error, f"Error loading memories: {e}")
+                        GLib.idle_add(self.update_memory_list, memory_items)
+                except Exception as e:
+                    GLib.idle_add(self.show_error, f"Error loading memories: {e}")
 
+                threading.Event().wait(10)  # Wait before next load
+
+        # Start loading memories in a separate thread
         threading.Thread(target=load_thread, daemon=True).start()
 
     def update_memory_list(self, memory_items: List[MemoryListItem]):
